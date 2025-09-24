@@ -1,5 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { App } from './app';
+
+const NUMBER_OF_OFFERS = 10;
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -7,6 +10,6 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <h1>Hello, World!</h1>
+    <App numberOffers={NUMBER_OF_OFFERS} />
   </React.StrictMode>
 );
