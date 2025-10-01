@@ -1,5 +1,5 @@
 import React from 'react';
-import { Offer } from '../../types/offer';
+import { Offer } from '@/shared/types/offer';
 
 interface Props {
   offer: Offer;

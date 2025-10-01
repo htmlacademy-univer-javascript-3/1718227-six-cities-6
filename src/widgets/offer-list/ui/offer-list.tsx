@@ -1,6 +1,6 @@
 import React from 'react';
-import { Offer } from '../../types/offer';
-import { OfferCard } from '../offer-card';
+import { Offer } from '@/shared/types/offer';
+import { OfferCard } from '@/entities/offer-card';
 
 interface Props {
   offers: Offer[];
