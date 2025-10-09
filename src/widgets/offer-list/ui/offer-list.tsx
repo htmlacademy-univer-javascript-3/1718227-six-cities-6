@@ -7,7 +7,7 @@ interface Props {
 }
 
 export const OfferList: React.FC<Props> = ({ numberOffers }) => {
-  const [_, setActiveOfferId] = useState<string>('');
+  const [, setActiveOfferId] = useState<string>('');
 
   const handleOfferMouseEnter = (offerId: string) => {
     setActiveOfferId(offerId);
