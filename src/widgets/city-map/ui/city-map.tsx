@@ -8,7 +8,7 @@ import useMap from '../lib/useMap';
 interface Props {
   city: City;
   offers: Offer[];
-  selectedOfferId: string;
+  selectedOfferId?: string;
 }
 
 const defaultCustomIcon = new Icon({
