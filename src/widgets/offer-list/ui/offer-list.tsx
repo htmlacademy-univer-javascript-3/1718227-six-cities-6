@@ -1,13 +1,14 @@
 import { OFFERS } from '@/shared/mocks/offers';
 import React, { useState } from 'react';
 import { OfferCards } from './offer-cards';
+import { CityMap } from '@/widgets/city-map';
 
 interface Props {
   numberOffers: number;
 }
 
 export const OfferList: React.FC<Props> = ({ numberOffers }) => {
-  const [, setActiveOfferId] = useState<string>('');
+  const [activeOfferId, setActiveOfferId] = useState<string>('');
 
   const handleOfferMouseEnter = (offerId: string) => {
     setActiveOfferId(offerId);
@@ -50,10 +51,17 @@ export const OfferList: React.FC<Props> = ({ numberOffers }) => {
           <OfferCards
             offers={OFFERS}
             onOfferMouseEnter={handleOfferMouseEnter}
+            className="cities__places-list places__list tabs__content"
           />
         </section>
         <div className="cities__right-section">
-          <section className="cities__map map" />
+          <section className="cities__map map">
+            <CityMap
+              offers={OFFERS}
+              selectedOfferId={activeOfferId}
+              city={OFFERS[0].city}
+            />
+          </section>
         </div>
       </div>
     </div>
