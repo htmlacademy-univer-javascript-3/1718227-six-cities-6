@@ -4,16 +4,21 @@ import { OfferCard } from '@/entities/offer-card';
 
 interface Props {
   offers: Offer[];
-  onOfferMouseEnter: (offerId: string) => void;
+  onOfferMouseEnter?: (offerId: string) => void;
+  className?: string;
 }
 
-export const OfferCards: React.FC<Props> = ({ offers, onOfferMouseEnter }) => (
-  <div className="cities__places-list places__list tabs__content">
+export const OfferCards: React.FC<Props> = ({
+  offers,
+  onOfferMouseEnter,
+  className,
+}) => (
+  <div className={className}>
     {offers.map((offer) => (
       <OfferCard
         key={offer.id}
         offer={offer}
-        onMouseEnter={() => onOfferMouseEnter(offer.id)}
+        onMouseEnter={() => onOfferMouseEnter?.(offer.id)}
       />
     ))}
   </div>

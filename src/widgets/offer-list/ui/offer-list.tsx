@@ -1,13 +1,15 @@
-import { OFFERS } from '@/shared/mocks/offers';
 import React, { useState } from 'react';
 import { OfferCards } from './offer-cards';
+import { CityMap } from '@/widgets/city-map';
+import { useAppSelector } from '@/shared/lib/redux';
 
-interface Props {
-  numberOffers: number;
-}
-
-export const OfferList: React.FC<Props> = ({ numberOffers }) => {
-  const [, setActiveOfferId] = useState<string>('');
+export const OfferList: React.FC = () => {
+  const [activeOfferId, setActiveOfferId] = useState<string>('');
+  const city = useAppSelector((state) => state.offer.city);
+  const allOffers = useAppSelector((state) => state.offer.offers);
+  const filteredOffers = allOffers.filter(
+    (offer) => offer.city.name === city.name
+  );
 
   const handleOfferMouseEnter = (offerId: string) => {
     setActiveOfferId(offerId);
@@ -19,7 +21,7 @@ export const OfferList: React.FC<Props> = ({ numberOffers }) => {
         <section className="cities__places places">
           <h2 className="visually-hidden">Places</h2>
           <b className="places__found">
-            {numberOffers} places to stay in Amsterdam
+            {filteredOffers.length} places to stay in {city.name}
           </b>
           <form className="places__sorting" action="#" method="get">
             <span className="places__sorting-caption">Sort by</span>
@@ -48,12 +50,19 @@ export const OfferList: React.FC<Props> = ({ numberOffers }) => {
             </ul>
           </form>
           <OfferCards
-            offers={OFFERS}
+            offers={filteredOffers}
             onOfferMouseEnter={handleOfferMouseEnter}
+            className="cities__places-list places__list tabs__content"
           />
         </section>
         <div className="cities__right-section">
-          <section className="cities__map map" />
+          <section className="cities__map map">
+            <CityMap
+              offers={filteredOffers}
+              selectedOfferId={activeOfferId}
+              city={city}
+            />
+          </section>
         </div>
       </div>
     </div>
