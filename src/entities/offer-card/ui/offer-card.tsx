@@ -6,12 +6,13 @@ import { getRouteOffer } from '@/shared/const/router';
 interface Props {
   offer: Offer;
   onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 }
 
-export const OfferCard: React.FC<Props> = ({ offer, onMouseEnter }) => {
+export const OfferCard: React.FC<Props> = ({ offer, onMouseEnter, onMouseLeave }) => {
   const { id, isPremium, previewImage, price, rating, title, type } = offer;
   return (
-    <article className={'cities__card place-card'} onMouseEnter={onMouseEnter}>
+    <article className={'cities__card place-card'} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       {isPremium && (
         <div className="place-card__mark">
           <span>Premium</span>
