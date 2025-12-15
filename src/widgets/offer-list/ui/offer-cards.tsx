@@ -5,12 +5,14 @@ import { OfferCard } from '@/entities/offer-card';
 interface Props {
   offers: Offer[];
   onOfferMouseEnter?: (offerId: string) => void;
+  onOfferMouseLeave?: () => void;
   className?: string;
 }
 
 export const OfferCards: React.FC<Props> = ({
   offers,
   onOfferMouseEnter,
+  onOfferMouseLeave,
   className,
 }) => (
   <div className={className}>
@@ -19,6 +21,7 @@ export const OfferCards: React.FC<Props> = ({
         key={offer.id}
         offer={offer}
         onMouseEnter={() => onOfferMouseEnter?.(offer.id)}
+        onMouseLeave={onOfferMouseLeave}
       />
     ))}
   </div>
