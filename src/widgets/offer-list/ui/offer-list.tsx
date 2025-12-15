@@ -51,6 +51,7 @@ export const OfferList: React.FC<Props> = ({ numberOffers }) => {
           <OfferCards
             offers={OFFERS}
             onOfferMouseEnter={handleOfferMouseEnter}
+            className="cities__places-list places__list tabs__content"
           />
         </section>
         <div className="cities__right-section">
