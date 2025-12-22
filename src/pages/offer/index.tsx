@@ -1,14 +1,16 @@
-import { OFFERS } from '@/shared/mocks/offers';
 import { CityMap } from '@/widgets/city-map';
 import { Header } from '@/widgets/header';
 import { OfferCards } from '@/widgets/offer-list/ui/offer-cards';
 import { ReviewSection } from '@/widgets/reviews/ui/review-section';
+import { useAppSelector } from '@/shared/lib/redux';
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
 export const OfferPage: React.FC = () => {
   const { id } = useParams();
-  const nearOffers = OFFERS.slice(0, 3);
+  const offers = useAppSelector((state) => state.offer.offers);
+  const nearOffers = offers.slice(0, 3);
+  const currentCity = offers[0]?.city;
   return (
     <div className="page">
       <Header />
@@ -144,13 +146,15 @@ export const OfferPage: React.FC = () => {
               <ReviewSection />
             </div>
           </div>
-          <section className="offer__map map">
-            <CityMap
-              offers={nearOffers}
-              selectedOfferId={id}
-              city={OFFERS[0].city}
-            />
-          </section>
+          {currentCity && (
+            <section className="offer__map map">
+              <CityMap
+                offers={nearOffers}
+                selectedOfferId={id}
+                city={currentCity}
+              />
+            </section>
+          )}
         </section>
         <div className="container">
           <section className="near-places places">

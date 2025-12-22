@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '@/shared/lib/redux';
 import { SortingOptions, SortType } from '@/features/sorting-options';
 import { Offer } from '@/shared/types/offer';
 import { setSortType } from '@/entities/offer';
+import { Spinner } from '@/shared/ui';
 
 const getSortedOffers = (offers: Offer[], sortType: SortType): Offer[] => {
   switch (sortType) {
@@ -26,6 +27,7 @@ export const OfferList: React.FC = () => {
   const city = useAppSelector((state) => state.offer.city);
   const allOffers = useAppSelector((state) => state.offer.offers);
   const sortType = useAppSelector((state) => state.offer.sortType);
+  const isLoading = useAppSelector((state) => state.offer.isLoading);
   const filteredOffers = allOffers.filter(
     (offer) => offer.city.name === city.name
   );
@@ -41,6 +43,10 @@ export const OfferList: React.FC = () => {
   const handleOfferMouseLeave = () => {
     setActiveOfferId('');
   };
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <div className="cities">
