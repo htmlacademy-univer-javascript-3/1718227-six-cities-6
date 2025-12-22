@@ -1,6 +1,6 @@
 import { setCity } from '@/entities/offer';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/redux';
-import { CITIES } from '@/shared/mocks/cities';
+import { CITIES } from '@/shared/const/cities';
 import { City } from '@/shared/types/offer';
 import React from 'react';
 
