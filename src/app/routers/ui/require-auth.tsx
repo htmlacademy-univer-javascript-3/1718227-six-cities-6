@@ -1,15 +1,23 @@
 import { getRouteLogin } from '@/shared/const/router';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
+import { useAppSelector } from '@/shared/lib/redux';
+import { AuthorizationStatus } from '@/entities/user';
+import { Spinner } from '@/shared/ui';
 
 interface RequireAuthProps {
   children: React.ReactNode;
 }
 
 export function RequireAuth({ children }: RequireAuthProps) {
-  const auth = false;
+  const location = useLocation();
+  const authorizationStatus = useAppSelector((state) => state.user.authorizationStatus);
 
-  if (!auth) {
-    return <Navigate to={getRouteLogin()} replace />;
+  if (authorizationStatus === AuthorizationStatus.Unknown) {
+    return <Spinner />;
+  }
+
+  if (authorizationStatus !== AuthorizationStatus.Auth) {
+    return <Navigate to={getRouteLogin()} state={{ from: location }} replace />;
   }
 
   return children;
