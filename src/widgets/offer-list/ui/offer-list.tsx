@@ -1,48 +1,38 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useCallback } from 'react';
 import { OfferCards } from './offer-cards';
 import { CityMap } from '@/widgets/city-map';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/redux';
 import { SortingOptions, SortType } from '@/features/sorting-options';
-import { Offer } from '@/shared/types/offer';
-import { setSortType } from '@/entities/offer';
+import {
+  setSortType,
+  selectCity,
+  selectIsLoading,
+  selectFilteredOffers,
+  selectSortedOffers,
+  selectSortType,
+} from '@/entities/offer';
 import { Spinner } from '@/shared/ui';
-
-const getSortedOffers = (offers: Offer[], sortType: SortType): Offer[] => {
-  switch (sortType) {
-    case SortType.PriceLowToHigh:
-      return [...offers].sort((a, b) => a.price - b.price);
-    case SortType.PriceHighToLow:
-      return [...offers].sort((a, b) => b.price - a.price);
-    case SortType.TopRatedFirst:
-      return [...offers].sort((a, b) => b.rating - a.rating);
-    case SortType.Popular:
-    default:
-      return offers;
-  }
-};
 
 export const OfferList: React.FC = () => {
   const [activeOfferId, setActiveOfferId] = useState<string>('');
   const dispatch = useAppDispatch();
-  const city = useAppSelector((state) => state.offer.city);
-  const allOffers = useAppSelector((state) => state.offer.offers);
-  const sortType = useAppSelector((state) => state.offer.sortType);
-  const isLoading = useAppSelector((state) => state.offer.isLoading);
-  const filteredOffers = allOffers.filter(
-    (offer) => offer.city.name === city.name
-  );
-  const sortedOffers = useMemo(
-    () => getSortedOffers(filteredOffers, sortType),
-    [filteredOffers, sortType]
-  );
+  const city = useAppSelector(selectCity);
+  const isLoading = useAppSelector(selectIsLoading);
+  const sortType = useAppSelector(selectSortType);
+  const filteredOffers = useAppSelector(selectFilteredOffers);
+  const sortedOffers = useAppSelector(selectSortedOffers);
 
-  const handleOfferMouseEnter = (offerId: string) => {
+  const handleOfferMouseEnter = useCallback((offerId: string) => {
     setActiveOfferId(offerId);
-  };
+  }, []);
 
-  const handleOfferMouseLeave = () => {
+  const handleOfferMouseLeave = useCallback(() => {
     setActiveOfferId('');
-  };
+  }, []);
+
+  const handleSortChange = useCallback((sort: SortType) => {
+    dispatch(setSortType(sort));
+  }, [dispatch]);
 
   if (isLoading) {
     return <Spinner />;
@@ -56,7 +46,7 @@ export const OfferList: React.FC = () => {
           <b className="places__found">
             {filteredOffers.length} places to stay in {city.name}
           </b>
-          <SortingOptions currentSort={sortType} onSortChange={(sort) => dispatch(setSortType(sort))} />
+          <SortingOptions currentSort={sortType} onSortChange={handleSortChange} />
           <OfferCards
             offers={sortedOffers}
             onOfferMouseEnter={handleOfferMouseEnter}

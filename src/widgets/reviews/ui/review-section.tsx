@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import ReviewList from './review-list';
 import { CommentForm } from '@/features/add-comment-form';
 import { Review, CommentData } from '@/entities/review';
@@ -11,10 +11,7 @@ interface ReviewSectionProps {
   offerId: string;
 }
 
-export const ReviewSection: React.FC<ReviewSectionProps> = ({
-  reviews,
-  offerId,
-}) => {
+function ReviewSectionComponent({ reviews, offerId }: ReviewSectionProps) {
   const dispatch = useAppDispatch();
   const authorizationStatus = useAppSelector(
     (state) => state.user.authorizationStatus
@@ -35,4 +32,6 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
       {isAuth && <CommentForm handleSubmit={handleSubmit} />}
     </section>
   );
-};
+}
+
+export const ReviewSection = memo(ReviewSectionComponent);

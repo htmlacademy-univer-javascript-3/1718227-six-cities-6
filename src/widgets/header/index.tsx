@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import {
   getRouteMain,
@@ -8,7 +8,7 @@ import {
 import { useAppSelector, useAppDispatch } from '@/shared/lib/redux';
 import { AuthorizationStatus, logout } from '@/entities/user';
 
-export const Header: React.FC = () => {
+function HeaderComponent() {
   const dispatch = useAppDispatch();
   const authorizationStatus = useAppSelector(
     (state) => state.user.authorizationStatus
@@ -17,10 +17,10 @@ export const Header: React.FC = () => {
 
   const isAuth = authorizationStatus === AuthorizationStatus.Auth;
 
-  const handleLogout = (evt: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleLogout = useCallback((evt: React.MouseEvent<HTMLAnchorElement>) => {
     evt.preventDefault();
     dispatch(logout());
-  };
+  }, [dispatch]);
 
   return (
     <header className="header">
@@ -88,4 +88,6 @@ export const Header: React.FC = () => {
       </div>
     </header>
   );
-};
+}
+
+export const Header = memo(HeaderComponent);

@@ -1,9 +1,11 @@
+import { memo } from 'react';
 import { ReviewCard, type Review } from '@/entities/review';
 
 interface IReviewList {
   reviews: Review[];
 }
-export default function ReviewList({ reviews }: IReviewList) {
+
+function ReviewListComponent({ reviews }: IReviewList) {
   return (
     <ul className="reviews__list">
       {reviews.map((review) => (
@@ -12,3 +14,6 @@ export default function ReviewList({ reviews }: IReviewList) {
     </ul>
   );
 }
+
+const ReviewList = memo(ReviewListComponent);
+export default ReviewList;

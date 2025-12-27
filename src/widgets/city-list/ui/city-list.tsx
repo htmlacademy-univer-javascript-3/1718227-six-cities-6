@@ -1,16 +1,17 @@
-import { setCity } from '@/entities/offer';
+import React, { memo, useCallback } from 'react';
+import { setCity, selectCity } from '@/entities/offer';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/redux';
 import { CITIES } from '@/shared/const/cities';
 import { City } from '@/shared/types/offer';
-import React from 'react';
 
-export const CityList: React.FC = () => {
+function CityListComponent() {
   const dispatch = useAppDispatch();
-  const selectedCity = useAppSelector((state) => state.offer.city);
+  const selectedCity = useAppSelector(selectCity);
 
-  const handleCityClick = (city: City) => {
+  const handleCityClick = useCallback((city: City) => (e: React.MouseEvent) => {
+    e.preventDefault();
     dispatch(setCity(city));
-  };
+  }, [dispatch]);
 
   return (
     <section className="locations container">
@@ -22,10 +23,7 @@ export const CityList: React.FC = () => {
                 selectedCity.name === city.name ? 'tabs__item--active' : ''
               }`}
               href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                handleCityClick(city);
-              }}
+              onClick={handleCityClick(city)}
               tabIndex={0}
               aria-label={`Select city ${city.name}`}
             >
@@ -36,4 +34,6 @@ export const CityList: React.FC = () => {
       </ul>
     </section>
   );
-};
+}
+
+export const CityList = memo(CityListComponent);

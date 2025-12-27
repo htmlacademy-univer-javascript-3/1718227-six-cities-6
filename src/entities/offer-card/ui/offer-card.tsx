@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import { Offer } from '@/shared/types/offer';
 import { Link } from 'react-router-dom';
 import { getRouteOffer } from '@/shared/const/router';
@@ -9,7 +9,7 @@ interface Props {
   onMouseLeave?: () => void;
 }
 
-export const OfferCard: React.FC<Props> = ({ offer, onMouseEnter, onMouseLeave }) => {
+function OfferCardComponent({ offer, onMouseEnter, onMouseLeave }: Props) {
   const { id, isPremium, previewImage, price, rating, title, type } = offer;
   return (
     <article className={'cities__card place-card'} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
@@ -55,4 +55,6 @@ export const OfferCard: React.FC<Props> = ({ offer, onMouseEnter, onMouseLeave }
       </div>
     </article>
   );
-};
+}
+
+export const OfferCard = memo(OfferCardComponent);
