@@ -10,4 +10,4 @@ export const getRouteMain = () => '/';
 export const getRouteLogin = () => '/login';
 export const getRouteFavorites = () => '/favorites';
 export const getRouteOffer = (id: string) => `/offer/${id}`;
-export const getRouteNotFound = () => '*';
+export const getRouteNotFound = () => '/404';

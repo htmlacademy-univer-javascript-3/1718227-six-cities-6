@@ -1,4 +1,10 @@
-import { type Review } from './model/types';
+import { type Review, type CommentData } from './model/types';
 import { ReviewCard } from './ui/review-card';
 
-export { type Review, ReviewCard };
+export { type Review, type CommentData, ReviewCard };
+export {
+  reviewReducer,
+  fetchReviews,
+  postReview,
+  clearReviews,
+} from './model/slice';

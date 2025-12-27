@@ -1,13 +1,14 @@
-import React from 'react';
-import { Review } from '@/entities/review/model/types';
+import React, { useState } from 'react';
+import { CommentData } from '@/entities/review';
 
 interface Props {
-  handleSubmit: (data: Pick<Review, 'comment' | 'rating'>) => void;
+  handleSubmit: (data: CommentData) => Promise<void> | void;
 }
 
 export const CommentForm: React.FC<Props> = ({ handleSubmit }) => {
-  const [rating, setRating] = React.useState<number>(0);
-  const [comment, setComment] = React.useState<string>('');
+  const [rating, setRating] = useState<number>(0);
+  const [comment, setComment] = useState<string>('');
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const handleRatingChange: React.ChangeEventHandler<HTMLInputElement> = (
     event
@@ -25,10 +26,21 @@ export const CommentForm: React.FC<Props> = ({ handleSubmit }) => {
     setComment(event.target.value);
   };
 
-  const handleFormSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
+  const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    handleSubmit({ comment, rating });
+    setIsSubmitting(true);
+
+    Promise.resolve(handleSubmit({ comment, rating }))
+      .then(() => {
+        setRating(0);
+        setComment('');
+      })
+      .finally(() => {
+        setIsSubmitting(false);
+      });
   };
+
+  const isValid = rating > 0 && comment.trim().length >= 50;
 
   return (
     <form
@@ -61,6 +73,7 @@ export const CommentForm: React.FC<Props> = ({ handleSubmit }) => {
                 type="radio"
                 checked={rating === value}
                 onChange={handleRatingChange}
+                disabled={isSubmitting}
               />
               <label
                 htmlFor={id}
@@ -82,6 +95,7 @@ export const CommentForm: React.FC<Props> = ({ handleSubmit }) => {
         placeholder="Tell how was your stay, what you like and what can be improved"
         value={comment}
         onChange={handleCommentChange}
+        disabled={isSubmitting}
       />
       <div className="reviews__button-wrapper">
         <p className="reviews__help">
@@ -92,7 +106,7 @@ export const CommentForm: React.FC<Props> = ({ handleSubmit }) => {
         <button
           className="reviews__submit form__submit button"
           type="submit"
-          disabled={!rating || comment.trim().length < 50}
+          disabled={!isValid || isSubmitting}
         >
           Submit
         </button>
