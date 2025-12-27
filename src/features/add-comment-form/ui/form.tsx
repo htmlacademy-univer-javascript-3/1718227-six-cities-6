@@ -40,7 +40,8 @@ export const CommentForm: React.FC<Props> = ({ handleSubmit }) => {
       });
   };
 
-  const isValid = rating > 0 && comment.trim().length >= 50;
+  const commentLength = comment.trim().length;
+  const isValid = rating > 0 && commentLength >= 50 && commentLength <= 300;
 
   return (
     <form
@@ -96,12 +97,13 @@ export const CommentForm: React.FC<Props> = ({ handleSubmit }) => {
         value={comment}
         onChange={handleCommentChange}
         disabled={isSubmitting}
+        maxLength={300}
       />
       <div className="reviews__button-wrapper">
         <p className="reviews__help">
           To submit review please make sure to set{' '}
           <span className="reviews__star">rating</span> and describe your stay
-          with at least <b className="reviews__text-amount">50 characters</b>.
+          with <b className="reviews__text-amount">50 to 300 characters</b>.
         </p>
         <button
           className="reviews__submit form__submit button"

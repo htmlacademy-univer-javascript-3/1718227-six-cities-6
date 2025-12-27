@@ -4,7 +4,7 @@ import { OfferCards } from '@/widgets/offer-list/ui/offer-cards';
 import { ReviewSection } from '@/widgets/reviews/ui/review-section';
 import { useAppSelector, useAppDispatch } from '@/shared/lib/redux';
 import { Spinner } from '@/shared/ui';
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useMemo } from 'react';
 import { useParams, Navigate, useNavigate } from 'react-router-dom';
 import {
   fetchOfferDetails,
@@ -15,6 +15,8 @@ import { fetchReviews, clearReviews } from '@/entities/review';
 import { getRouteNotFound, getRouteLogin } from '@/shared/const/router';
 import { toggleFavorite } from '@/entities/favorites';
 import { AuthorizationStatus } from '@/entities/user';
+
+const MAX_NEARBY_OFFERS = 3;
 
 export const OfferPage: React.FC = () => {
   const { id } = useParams();
@@ -27,6 +29,16 @@ export const OfferPage: React.FC = () => {
   const reviews = useAppSelector((state) => state.review.reviews);
   const authorizationStatus = useAppSelector(
     (state) => state.user.authorizationStatus
+  );
+
+  const limitedNearbyOffers = useMemo(
+    () => nearbyOffers.slice(0, MAX_NEARBY_OFFERS),
+    [nearbyOffers]
+  );
+
+  const mapOffers = useMemo(
+    () => (offer ? [offer, ...limitedNearbyOffers] : limitedNearbyOffers),
+    [offer, limitedNearbyOffers]
   );
 
   const handleFavoriteClick = useCallback(() => {
@@ -174,7 +186,7 @@ export const OfferPage: React.FC = () => {
           </div>
           <section className="offer__map map">
             <CityMap
-              offers={nearbyOffers}
+              offers={mapOffers}
               selectedOfferId={id}
               city={offer.city}
             />
@@ -186,7 +198,7 @@ export const OfferPage: React.FC = () => {
               Other places in the neighbourhood
             </h2>
             <OfferCards
-              offers={nearbyOffers}
+              offers={limitedNearbyOffers}
               className="near-places__list places__list"
             />
           </section>
