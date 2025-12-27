@@ -6,3 +6,11 @@ export {
   fetchNearbyOffers,
   clearOfferDetails,
 } from './model/offer-details-slice';
+export {
+  selectCity,
+  selectOffers,
+  selectSortType,
+  selectIsLoading,
+  selectFilteredOffers,
+  selectSortedOffers,
+} from './model/selectors';

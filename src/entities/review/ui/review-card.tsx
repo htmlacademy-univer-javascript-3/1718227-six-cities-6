@@ -1,11 +1,11 @@
-import React from 'react';
+import { memo } from 'react';
 import { type Review } from '../model/types';
 
 interface Props {
   review: Review;
 }
 
-export const ReviewCard: React.FC<Props> = ({ review }) => {
+function ReviewCardComponent({ review }: Props) {
   const { date, user, comment, rating } = review;
   return (
     <li className="reviews__item">
@@ -35,4 +35,6 @@ export const ReviewCard: React.FC<Props> = ({ review }) => {
       </div>
     </li>
   );
-};
+}
+
+export const ReviewCard = memo(ReviewCardComponent);
