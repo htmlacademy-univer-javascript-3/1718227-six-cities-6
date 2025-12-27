@@ -3,6 +3,7 @@ import { AxiosInstance } from 'axios';
 import { City, Offer } from '@/shared/types/offer';
 import { CITIES } from '@/shared/const/cities';
 import { SortType } from './types';
+import { toggleFavorite } from '@/entities/favorites';
 
 interface OfferState {
   city: City;
@@ -56,6 +57,15 @@ const offerSlice = createSlice({
       .addCase(fetchOffers.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message || 'Failed to fetch offers';
+      })
+      .addCase(toggleFavorite.fulfilled, (state, action) => {
+        const updatedOffer = action.payload;
+        const offerIndex = state.offers.findIndex(
+          (offer) => offer.id === updatedOffer.id
+        );
+        if (offerIndex !== -1) {
+          state.offers[offerIndex].isFavorite = updatedOffer.isFavorite;
+        }
       });
   },
 });

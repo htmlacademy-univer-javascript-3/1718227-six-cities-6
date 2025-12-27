@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { OfferCards } from './offer-cards';
+import { MainEmpty } from './main-empty';
 import { CityMap } from '@/widgets/city-map';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/redux';
 import { SortingOptions, SortType } from '@/features/sorting-options';
@@ -13,7 +14,11 @@ import {
 } from '@/entities/offer';
 import { Spinner } from '@/shared/ui';
 
-export const OfferList: React.FC = () => {
+interface OfferListProps {
+  onEmptyChange?: (isEmpty: boolean) => void;
+}
+
+export const OfferList: React.FC<OfferListProps> = ({ onEmptyChange }) => {
   const [activeOfferId, setActiveOfferId] = useState<string>('');
   const dispatch = useAppDispatch();
   const city = useAppSelector(selectCity);
@@ -21,6 +26,12 @@ export const OfferList: React.FC = () => {
   const sortType = useAppSelector(selectSortType);
   const filteredOffers = useAppSelector(selectFilteredOffers);
   const sortedOffers = useAppSelector(selectSortedOffers);
+
+  const isEmpty = filteredOffers.length === 0;
+
+  React.useEffect(() => {
+    onEmptyChange?.(isEmpty);
+  }, [isEmpty, onEmptyChange]);
 
   const handleOfferMouseEnter = useCallback((offerId: string) => {
     setActiveOfferId(offerId);
@@ -30,12 +41,19 @@ export const OfferList: React.FC = () => {
     setActiveOfferId('');
   }, []);
 
-  const handleSortChange = useCallback((sort: SortType) => {
-    dispatch(setSortType(sort));
-  }, [dispatch]);
+  const handleSortChange = useCallback(
+    (sort: SortType) => {
+      dispatch(setSortType(sort));
+    },
+    [dispatch]
+  );
 
   if (isLoading) {
     return <Spinner />;
+  }
+
+  if (isEmpty) {
+    return <MainEmpty cityName={city.name} />;
   }
 
   return (
@@ -46,7 +64,10 @@ export const OfferList: React.FC = () => {
           <b className="places__found">
             {filteredOffers.length} places to stay in {city.name}
           </b>
-          <SortingOptions currentSort={sortType} onSortChange={handleSortChange} />
+          <SortingOptions
+            currentSort={sortType}
+            onSortChange={handleSortChange}
+          />
           <OfferCards
             offers={sortedOffers}
             onOfferMouseEnter={handleOfferMouseEnter}

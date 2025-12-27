@@ -1,17 +1,27 @@
 import { Header } from '@/widgets/header';
 import { OfferList } from '@/widgets/offer-list';
 import { CityList } from '@/widgets/city-list';
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 
-export const MainPage: React.FC = () => (
-  <div className="page page--gray page--main">
-    <Header />
-    <main className="page__main page__main--index">
-      <h1 className="visually-hidden">Cities</h1>
-      <div className="tabs">
-        <CityList />
-      </div>
-      <OfferList />
-    </main>
-  </div>
-);
+export const MainPage: React.FC = () => {
+  const [isEmpty, setIsEmpty] = useState(false);
+
+  const handleEmptyChange = useCallback((empty: boolean) => {
+    setIsEmpty(empty);
+  }, []);
+
+  const mainClassName = `page__main page__main--index${isEmpty ? ' page__main--index-empty' : ''}`;
+
+  return (
+    <div className="page page--gray page--main">
+      <Header />
+      <main className={mainClassName}>
+        <h1 className="visually-hidden">Cities</h1>
+        <div className="tabs">
+          <CityList />
+        </div>
+        <OfferList onEmptyChange={handleEmptyChange} />
+      </main>
+    </div>
+  );
+};

@@ -4,24 +4,41 @@ import { OfferCards } from '@/widgets/offer-list/ui/offer-cards';
 import { ReviewSection } from '@/widgets/reviews/ui/review-section';
 import { useAppSelector, useAppDispatch } from '@/shared/lib/redux';
 import { Spinner } from '@/shared/ui';
-import React, { useEffect } from 'react';
-import { useParams, Navigate } from 'react-router-dom';
+import React, { useEffect, useCallback } from 'react';
+import { useParams, Navigate, useNavigate } from 'react-router-dom';
 import {
   fetchOfferDetails,
   fetchNearbyOffers,
   clearOfferDetails,
 } from '@/entities/offer';
 import { fetchReviews, clearReviews } from '@/entities/review';
-import { getRouteNotFound } from '@/shared/const/router';
+import { getRouteNotFound, getRouteLogin } from '@/shared/const/router';
+import { toggleFavorite } from '@/entities/favorites';
+import { AuthorizationStatus } from '@/entities/user';
 
 export const OfferPage: React.FC = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const { offer, nearbyOffers, isLoading, error } = useAppSelector(
     (state) => state.offerDetails
   );
   const reviews = useAppSelector((state) => state.review.reviews);
+  const authorizationStatus = useAppSelector(
+    (state) => state.user.authorizationStatus
+  );
+
+  const handleFavoriteClick = useCallback(() => {
+    if (!offer) {
+      return;
+    }
+    if (authorizationStatus !== AuthorizationStatus.Auth) {
+      navigate(getRouteLogin());
+      return;
+    }
+    dispatch(toggleFavorite({ offerId: offer.id, status: offer.isFavorite ? 0 : 1 }));
+  }, [authorizationStatus, dispatch, navigate, offer]);
 
   useEffect(() => {
     if (id) {
@@ -78,11 +95,19 @@ export const OfferPage: React.FC = () => {
               )}
               <div className="offer__name-wrapper">
                 <h1 className="offer__name">{offer.title}</h1>
-                <button className="offer__bookmark-button button" type="button">
+                <button
+                  className={`offer__bookmark-button button${
+                    offer.isFavorite ? ' offer__bookmark-button--active' : ''
+                  }`}
+                  type="button"
+                  onClick={handleFavoriteClick}
+                >
                   <svg className="offer__bookmark-icon" width={31} height={33}>
                     <use xlinkHref="#icon-bookmark" />
                   </svg>
-                  <span className="visually-hidden">To bookmarks</span>
+                  <span className="visually-hidden">
+                    {offer.isFavorite ? 'In bookmarks' : 'To bookmarks'}
+                  </span>
                 </button>
               </div>
               <div className="offer__rating rating">
