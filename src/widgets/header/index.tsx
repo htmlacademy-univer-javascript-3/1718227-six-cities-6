@@ -7,6 +7,7 @@ import {
 } from '@/shared/const/router';
 import { useAppSelector, useAppDispatch } from '@/shared/lib/redux';
 import { AuthorizationStatus, logout } from '@/entities/user';
+import { selectFavoritesCount } from '@/entities/favorites';
 
 function HeaderComponent() {
   const dispatch = useAppDispatch();
@@ -14,6 +15,7 @@ function HeaderComponent() {
     (state) => state.user.authorizationStatus
   );
   const userInfo = useAppSelector((state) => state.user.userInfo);
+  const favoritesCount = useAppSelector(selectFavoritesCount);
 
   const isAuth = authorizationStatus === AuthorizationStatus.Auth;
 
@@ -58,7 +60,7 @@ function HeaderComponent() {
                       <span className="header__user-name user__name">
                         {userInfo?.email}
                       </span>
-                      <span className="header__favorite-count">3</span>
+                      <span className="header__favorite-count">{favoritesCount}</span>
                     </Link>
                   </li>
                   <li className="header__nav-item">

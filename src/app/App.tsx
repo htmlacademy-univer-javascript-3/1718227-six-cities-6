@@ -1,17 +1,27 @@
 import React, { useEffect } from 'react';
 import { Providers } from './providers';
 import { AppRouter } from './routers';
-import { useAppDispatch } from '@/shared/lib/redux';
+import { useAppDispatch, useAppSelector } from '@/shared/lib/redux';
 import { fetchOffers } from '@/entities/offer';
-import { checkAuth } from '@/entities/user';
+import { checkAuth, AuthorizationStatus } from '@/entities/user';
+import { fetchFavorites } from '@/entities/favorites';
 
 const AppContent: React.FC = () => {
   const dispatch = useAppDispatch();
+  const authorizationStatus = useAppSelector(
+    (state) => state.user.authorizationStatus
+  );
 
   useEffect(() => {
     dispatch(checkAuth());
     dispatch(fetchOffers());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (authorizationStatus === AuthorizationStatus.Auth) {
+      dispatch(fetchFavorites());
+    }
+  }, [dispatch, authorizationStatus]);
 
   return <AppRouter />;
 };

@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
 import { FullOffer, Offer } from '@/shared/types/offer';
+import { toggleFavorite } from '@/entities/favorites';
 
 interface OfferDetailsState {
   offer: FullOffer | null;
@@ -70,6 +71,18 @@ const offerDetailsSlice = createSlice({
       })
       .addCase(fetchNearbyOffers.fulfilled, (state, action) => {
         state.nearbyOffers = action.payload;
+      })
+      .addCase(toggleFavorite.fulfilled, (state, action) => {
+        const updatedOffer = action.payload;
+        if (state.offer && state.offer.id === updatedOffer.id) {
+          state.offer.isFavorite = updatedOffer.isFavorite;
+        }
+        const nearbyIndex = state.nearbyOffers.findIndex(
+          (offer) => offer.id === updatedOffer.id
+        );
+        if (nearbyIndex !== -1) {
+          state.nearbyOffers[nearbyIndex].isFavorite = updatedOffer.isFavorite;
+        }
       });
   },
 });
