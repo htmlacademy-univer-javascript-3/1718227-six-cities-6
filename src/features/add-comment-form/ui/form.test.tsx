@@ -122,4 +122,21 @@ describe('CommentForm', () => {
 
     expect(textarea).toHaveValue('');
   });
+
+  it('should have textarea with maxLength of 300', () => {
+    const handleSubmit = vi.fn();
+
+    render(<CommentForm handleSubmit={handleSubmit} />);
+
+    const textarea = screen.getByPlaceholderText(/Tell how was your stay/i);
+    expect(textarea).toHaveAttribute('maxLength', '300');
+  });
+
+  it('should display correct help text about 50 to 300 characters', () => {
+    const handleSubmit = vi.fn();
+
+    render(<CommentForm handleSubmit={handleSubmit} />);
+
+    expect(screen.getByText(/50 to 300 characters/i)).toBeInTheDocument();
+  });
 });

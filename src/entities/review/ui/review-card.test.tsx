@@ -32,13 +32,27 @@ describe('ReviewCard', () => {
     expect(ratingStars).toHaveStyle({ width: `${review.rating * 20}%` });
   });
 
-  it('should display review date', () => {
-    const review = makeFakeReview();
+  it('should display review date in Month Year format', () => {
+    const review = {
+      ...makeFakeReview(),
+      date: '2023-04-15T12:00:00.000Z',
+    };
 
     render(<ReviewCard review={review} />);
 
-    const dateElement = screen.getByText(review.date);
+    const dateElement = screen.getByText('April 2023');
     expect(dateElement).toBeInTheDocument();
     expect(dateElement).toHaveAttribute('dateTime', review.date);
+  });
+
+  it('should format different dates correctly', () => {
+    const review = {
+      ...makeFakeReview(),
+      date: '2019-12-25T00:00:00.000Z',
+    };
+
+    render(<ReviewCard review={review} />);
+
+    expect(screen.getByText('December 2019')).toBeInTheDocument();
   });
 });

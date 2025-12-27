@@ -13,14 +13,27 @@ interface Props {
   className?: string;
 }
 
-function OfferCardComponent({ offer, onMouseEnter, onMouseLeave, className = 'cities__card' }: Props) {
-  const { id, isPremium, isFavorite, previewImage, price, rating, title, type } = offer;
+function OfferCardComponent({
+  offer,
+  onMouseEnter,
+  onMouseLeave,
+  className = 'cities__card',
+}: Props) {
+  const {
+    id,
+    isPremium,
+    isFavorite,
+    previewImage,
+    price,
+    rating,
+    title,
+    type,
+  } = offer;
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const authorizationStatus = useAppSelector(
     (state) => state.user.authorizationStatus
   );
-
   const handleFavoriteClick = useCallback(() => {
     if (authorizationStatus !== AuthorizationStatus.Auth) {
       navigate(getRouteLogin());
@@ -32,15 +45,23 @@ function OfferCardComponent({ offer, onMouseEnter, onMouseLeave, className = 'ci
   const bookmarkButtonClass = `place-card__bookmark-button button${
     isFavorite ? ' place-card__bookmark-button--active' : ''
   }`;
-
+  const ratingWidth = `${Math.round(rating) * 20}%`;
   return (
-    <article className={`${className} place-card`} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+    <article
+      className={`${className} place-card`}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
       {isPremium && (
         <div className="place-card__mark">
           <span>Premium</span>
         </div>
       )}
-      <div className={`${className.split('__')[0]}__image-wrapper place-card__image-wrapper`}>
+      <div
+        className={`${
+          className.split('__')[0]
+        }__image-wrapper place-card__image-wrapper`}
+      >
         <Link to={getRouteOffer(id)}>
           <img
             className="place-card__image"
@@ -72,7 +93,7 @@ function OfferCardComponent({ offer, onMouseEnter, onMouseLeave, className = 'ci
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{ width: `${rating}%` }} />
+            <span style={{ width: ratingWidth }} />
             <span className="visually-hidden">Rating</span>
           </div>
         </div>

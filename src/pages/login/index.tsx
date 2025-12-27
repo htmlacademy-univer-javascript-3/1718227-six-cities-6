@@ -1,9 +1,11 @@
-import React, { useState, FormEvent, ChangeEvent } from 'react';
+import React, { useState, FormEvent, ChangeEvent, useMemo } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { Header } from '@/widgets/header';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/redux';
 import { login, AuthorizationStatus } from '@/entities/user';
+import { setCity } from '@/entities/offer';
 import { getRouteMain } from '@/shared/const/router';
+import { CITIES } from '@/shared/const/cities';
 
 export const LoginPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -14,6 +16,17 @@ export const LoginPage: React.FC = () => {
     email: '',
     password: '',
   });
+
+  const randomCity = useMemo(() => {
+    const randomIndex = Math.floor(Math.random() * CITIES.length);
+    return CITIES[randomIndex];
+  }, []);
+
+  const isPasswordValid = (password: string): boolean => {
+    const hasLetter = /[a-zA-Z]/.test(password);
+    const hasDigit = /\d/.test(password);
+    return hasLetter && hasDigit;
+  };
 
   if (authorizationStatus === AuthorizationStatus.Auth) {
     return <Navigate to={getRouteMain()} replace />;
@@ -30,11 +43,20 @@ export const LoginPage: React.FC = () => {
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
 
+    if (!isPasswordValid(formData.password)) {
+      return;
+    }
+
     dispatch(login(formData))
       .unwrap()
       .then(() => {
         navigate(getRouteMain());
       });
+  };
+
+  const handleRandomCityClick = () => {
+    dispatch(setCity(randomCity));
+    navigate(getRouteMain());
   };
 
   return (
@@ -69,15 +91,26 @@ export const LoginPage: React.FC = () => {
                   onChange={handleChange}
                 />
               </div>
-              <button className="login__submit form__submit button" type="submit">
+              <button
+                className="login__submit form__submit button"
+                type="submit"
+                disabled={!isPasswordValid(formData.password)}
+              >
                 Sign in
               </button>
             </form>
           </section>
           <section className="locations locations--login locations--current">
             <div className="locations__item">
-              <a className="locations__item-link" href="#">
-                <span>Amsterdam</span>
+              <a
+                className="locations__item-link"
+                href="#"
+                onClick={(evt) => {
+                  evt.preventDefault();
+                  handleRandomCityClick();
+                }}
+              >
+                <span>{randomCity.name}</span>
               </a>
             </div>
           </section>

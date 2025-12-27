@@ -5,8 +5,16 @@ interface Props {
   review: Review;
 }
 
+function formatDate(dateString: string): string {
+  return new Date(dateString).toLocaleDateString('en-US', {
+    month: 'long',
+    year: 'numeric',
+  });
+}
+
 function ReviewCardComponent({ review }: Props) {
   const { date, user, comment, rating } = review;
+  const formattedDate = formatDate(date);
   return (
     <li className="reviews__item">
       <div className="reviews__user user">
@@ -30,7 +38,7 @@ function ReviewCardComponent({ review }: Props) {
         </div>
         <p className="reviews__text">{comment}</p>
         <time className="reviews__time" dateTime={date}>
-          {date}
+          {formattedDate}
         </time>
       </div>
     </li>
