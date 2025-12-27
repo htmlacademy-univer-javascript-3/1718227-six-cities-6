@@ -23,3 +23,16 @@ export interface Offer {
   rating: number;
   previewImage: string;
 }
+
+export interface FullOffer extends Offer {
+  description: string;
+  bedrooms: number;
+  goods: string[];
+  host: {
+    name: string;
+    avatarUrl: string;
+    isPro: boolean;
+  };
+  images: string[];
+  maxAdults: number;
+}
