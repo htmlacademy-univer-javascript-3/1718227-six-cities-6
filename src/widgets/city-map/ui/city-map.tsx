@@ -3,7 +3,7 @@ import { Icon, Marker, layerGroup } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { URL_MARKER_CURRENT, URL_MARKER_DEFAULT } from '../config/consts';
 import { City, Offer } from '@/shared/types/offer';
-import useMap from '../lib/useMap';
+import useMap from '../lib/use-map';
 
 interface Props {
   city: City;

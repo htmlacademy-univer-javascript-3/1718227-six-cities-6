@@ -15,6 +15,7 @@ import { fetchReviews, clearReviews } from '@/entities/review';
 import { getRouteNotFound, getRouteLogin } from '@/shared/const/router';
 import { toggleFavorite } from '@/entities/favorites';
 import { AuthorizationStatus } from '@/entities/user';
+import { RATING_PERCENT_PER_STAR } from '@/shared/const/rating';
 
 const MAX_NEARBY_OFFERS = 3;
 
@@ -78,7 +79,7 @@ export const OfferPage: React.FC = () => {
     );
   }
 
-  const ratingWidth = `${Math.round(offer.rating) * 20}%`;
+  const ratingWidth = `${Math.round(offer.rating) * RATING_PERCENT_PER_STAR}%`;
 
   return (
     <div className="page">

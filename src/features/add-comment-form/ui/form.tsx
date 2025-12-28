@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { CommentData } from '@/entities/review';
 
+const MIN_COMMENT_LENGTH = 50;
+const MAX_COMMENT_LENGTH = 300;
+const MIN_RATING = 0;
+
 interface Props {
-  handleSubmit: (data: CommentData) => Promise<void> | void;
+  onSubmit: (data: CommentData) => Promise<void> | void;
 }
 
-export const CommentForm: React.FC<Props> = ({ handleSubmit }) => {
+export const CommentForm: React.FC<Props> = ({ onSubmit }) => {
   const [rating, setRating] = useState<number>(0);
   const [comment, setComment] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -30,7 +34,7 @@ export const CommentForm: React.FC<Props> = ({ handleSubmit }) => {
     event.preventDefault();
     setIsSubmitting(true);
 
-    Promise.resolve(handleSubmit({ comment, rating }))
+    Promise.resolve(onSubmit({ comment, rating }))
       .then(() => {
         setRating(0);
         setComment('');
@@ -41,7 +45,7 @@ export const CommentForm: React.FC<Props> = ({ handleSubmit }) => {
   };
 
   const commentLength = comment.trim().length;
-  const isValid = rating > 0 && commentLength >= 50 && commentLength <= 300;
+  const isValid = rating > MIN_RATING && commentLength >= MIN_COMMENT_LENGTH && commentLength <= MAX_COMMENT_LENGTH;
 
   return (
     <form
@@ -97,7 +101,7 @@ export const CommentForm: React.FC<Props> = ({ handleSubmit }) => {
         value={comment}
         onChange={handleCommentChange}
         disabled={isSubmitting}
-        maxLength={300}
+        maxLength={MAX_COMMENT_LENGTH}
       />
       <div className="reviews__button-wrapper">
         <p className="reviews__help">

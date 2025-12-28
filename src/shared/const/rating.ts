@@ -1,0 +1,1 @@
+export const RATING_PERCENT_PER_STAR = 20;
