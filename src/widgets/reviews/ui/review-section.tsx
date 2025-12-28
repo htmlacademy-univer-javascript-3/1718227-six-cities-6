@@ -37,7 +37,7 @@ function ReviewSectionComponent({ reviews, offerId }: ReviewSectionProps) {
         Reviews &middot; <span className="reviews__amount">{reviews.length}</span>
       </h2>
       <ReviewList reviews={sortedAndLimitedReviews} />
-      {isAuth && <CommentForm handleSubmit={handleSubmit} />}
+      {isAuth && <CommentForm onSubmit={handleSubmit} />}
     </section>
   );
 }

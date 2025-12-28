@@ -5,6 +5,7 @@ import { getRouteOffer, getRouteLogin } from '@/shared/const/router';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/redux';
 import { toggleFavorite } from '@/entities/favorites';
 import { AuthorizationStatus } from '@/entities/user';
+import { RATING_PERCENT_PER_STAR } from '@/shared/const/rating';
 
 interface Props {
   offer: Offer;
@@ -45,7 +46,7 @@ function OfferCardComponent({
   const bookmarkButtonClass = `place-card__bookmark-button button${
     isFavorite ? ' place-card__bookmark-button--active' : ''
   }`;
-  const ratingWidth = `${Math.round(rating) * 20}%`;
+  const ratingWidth = `${Math.round(rating) * RATING_PERCENT_PER_STAR}%`;
   return (
     <article
       className={`${className} place-card`}

@@ -7,7 +7,7 @@ describe('CommentForm', () => {
   it('should render form with rating and textarea', () => {
     const handleSubmit = vi.fn();
 
-    render(<CommentForm handleSubmit={handleSubmit} />);
+    render(<CommentForm onSubmit={handleSubmit} />);
 
     expect(screen.getByText('Your review')).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/Tell how was your stay/i)).toBeInTheDocument();
@@ -17,7 +17,7 @@ describe('CommentForm', () => {
   it('should have submit button disabled initially', () => {
     const handleSubmit = vi.fn();
 
-    render(<CommentForm handleSubmit={handleSubmit} />);
+    render(<CommentForm onSubmit={handleSubmit} />);
 
     const submitButton = screen.getByRole('button', { name: /Submit/i });
     expect(submitButton).toBeDisabled();
@@ -27,7 +27,7 @@ describe('CommentForm', () => {
     const user = userEvent.setup();
     const handleSubmit = vi.fn();
 
-    render(<CommentForm handleSubmit={handleSubmit} />);
+    render(<CommentForm onSubmit={handleSubmit} />);
 
     const ratingInput = screen.getByTitle('perfect');
     await user.click(ratingInput);
@@ -44,7 +44,7 @@ describe('CommentForm', () => {
     const user = userEvent.setup();
     const handleSubmit = vi.fn();
 
-    render(<CommentForm handleSubmit={handleSubmit} />);
+    render(<CommentForm onSubmit={handleSubmit} />);
 
     const ratingInput = screen.getByTitle('perfect');
     await user.click(ratingInput);
@@ -60,7 +60,7 @@ describe('CommentForm', () => {
     const user = userEvent.setup();
     const handleSubmit = vi.fn();
 
-    render(<CommentForm handleSubmit={handleSubmit} />);
+    render(<CommentForm onSubmit={handleSubmit} />);
 
     const textarea = screen.getByPlaceholderText(/Tell how was your stay/i);
     const longComment = 'This is a test comment that is definitely longer than fifty characters to pass validation.';
@@ -74,7 +74,7 @@ describe('CommentForm', () => {
     const user = userEvent.setup();
     const handleSubmit = vi.fn().mockResolvedValue(undefined);
 
-    render(<CommentForm handleSubmit={handleSubmit} />);
+    render(<CommentForm onSubmit={handleSubmit} />);
 
     const ratingInput = screen.getByTitle('perfect');
     await user.click(ratingInput);
@@ -95,7 +95,7 @@ describe('CommentForm', () => {
   it('should render all rating options', () => {
     const handleSubmit = vi.fn();
 
-    render(<CommentForm handleSubmit={handleSubmit} />);
+    render(<CommentForm onSubmit={handleSubmit} />);
 
     expect(screen.getByTitle('perfect')).toBeInTheDocument();
     expect(screen.getByTitle('good')).toBeInTheDocument();
@@ -108,7 +108,7 @@ describe('CommentForm', () => {
     const user = userEvent.setup();
     const handleSubmit = vi.fn().mockResolvedValue(undefined);
 
-    render(<CommentForm handleSubmit={handleSubmit} />);
+    render(<CommentForm onSubmit={handleSubmit} />);
 
     const ratingInput = screen.getByTitle('perfect');
     await user.click(ratingInput);
@@ -126,7 +126,7 @@ describe('CommentForm', () => {
   it('should have textarea with maxLength of 300', () => {
     const handleSubmit = vi.fn();
 
-    render(<CommentForm handleSubmit={handleSubmit} />);
+    render(<CommentForm onSubmit={handleSubmit} />);
 
     const textarea = screen.getByPlaceholderText(/Tell how was your stay/i);
     expect(textarea).toHaveAttribute('maxLength', '300');
@@ -135,7 +135,7 @@ describe('CommentForm', () => {
   it('should display correct help text about 50 to 300 characters', () => {
     const handleSubmit = vi.fn();
 
-    render(<CommentForm handleSubmit={handleSubmit} />);
+    render(<CommentForm onSubmit={handleSubmit} />);
 
     expect(screen.getByText(/50 to 300 characters/i)).toBeInTheDocument();
   });
