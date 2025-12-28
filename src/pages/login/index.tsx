@@ -22,7 +22,7 @@ export const LoginPage: React.FC = () => {
     return CITIES[randomIndex];
   }, []);
 
-  const isPasswordValid = (password: string): boolean => {
+  const validatePassword = (password: string): boolean => {
     const hasLetter = /[a-zA-Z]/.test(password);
     const hasDigit = /\d/.test(password);
     return hasLetter && hasDigit;
@@ -43,7 +43,7 @@ export const LoginPage: React.FC = () => {
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
 
-    if (!isPasswordValid(formData.password)) {
+    if (!validatePassword(formData.password)) {
       return;
     }
 
@@ -94,7 +94,7 @@ export const LoginPage: React.FC = () => {
               <button
                 className="login__submit form__submit button"
                 type="submit"
-                disabled={!isPasswordValid(formData.password)}
+                disabled={!validatePassword(formData.password)}
               >
                 Sign in
               </button>

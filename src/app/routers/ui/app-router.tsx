@@ -1,6 +1,6 @@
 import { AppRoutesProps } from '@/shared/types/router';
 import { Route, Routes, Navigate } from 'react-router-dom';
-import { routeConfig } from '../config/routeConfig';
+import { routeConfig } from '../config/route-config';
 import { RequireAuth } from './require-auth';
 import { getRouteNotFound } from '@/shared/const/router';
 
